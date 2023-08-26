@@ -1,15 +1,35 @@
 #!/bin/bash
 
-# Source our functions library
-. ~/bin/functions.sh
+# This is a very "quick-'n-dirty" script in order to build
+# Ardour. If you want to criticise, feel free to do so.
+# If you want to re-write it, by all means!
+#
+# There are many reasons why you would want to
+# or build Ardour from source, so instead of debating
+# on whether it's a good idea or not, just build it.
+# This script is meant for Debian-style environments,
+# specifically Debian, Ubuntu, Linux Mint and similar.
+# Please ensure that you have read the Ardour build documentation
+# so that you understand which dependencies to install before you
+# start building Ardour.
+#
+# This script is released under the MIT licence (see LICENSE file),
+# which means you can do with it what you want. If you break it,
+# you even get to keep the pieces, which is nice! :-D
+#
+# Important note: This script does not use checkinstall to create
+# DEB files, it installs Ardour in "/usr/local/bin" instead.
+
+
+# Pause function - "press X to continue" 
+function pause(){
+   read -p "$*"
+}
+
 export $(grep DISTRIB_CODENAME /etc/lsb-release)
 MYPWD=$(pwd)
 
-# Update ardour codebase
-#cd ardour
-#git pull
-#cd ..
-
+# Clone Ardour codebase, and ensure we have liblrdf0-dev installed
 rm -rf ardour/
 git clone https://github.com/Ardour/ardour.git
 # sudo apt -y install liblrdf0-dev
@@ -32,22 +52,13 @@ PKG_VER=$(git describe --long --tags --dirty --always)
 ./waf configure --docs --freedesktop --with-backends=jack,alsa,dummy,pulseaudio
 time ./waf build -j$THREADS
 
-# --use-lld
-
 echo ""
 echo "Press [Enter] to continue installing Ardour $PKG_VER, or press"
 pause '[Ctrl]+[c] to exit script:'
 echo ""
 
-#echo "Removing previous Ardour..."
+#echo "Removing distribution version of Ardour (very old)..."
 sudo apt remove ardour
-#cd /usr/local
-# In case we built Ardour 5
-#sudo rm -rf $(find -type d -name "ardour5")
-#sudo rm -f /usr/local/bin/ardour5*
-# In case we built Ardour 6
-#sudo rm -rf $(find -type d -name "ardour6")
-#sudo rm -f /usr/local/bin/ardour6*
 
 cd $MYPWD
 echo ""
@@ -57,13 +68,6 @@ echo ""
 cd ardour-build
 
 sudo ./waf install
-
-#echo ""
-#echo "Ardour $PKG_VER, the Open Source professional digital audio workstation." > description-pak
-#sudo checkinstall --default --pkgname=ardour --fstrans=no --backup=no --pkgversion="1:$PKG_VER-$(date +%Y%m%d)-$DISTRIB_CODENAME" --deldoc=yes ./waf install
-#sleep 2
-#cp $MYPWD/ardour-build/*.deb $MYPWD/zz-packages/
-
 
 echo "Done!"
 cd $MYPWD
