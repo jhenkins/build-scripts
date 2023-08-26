@@ -1,7 +1,32 @@
 #!/bin/bash
 
-# Source our functions library
-. ~/bin/functions.sh
+# This is a very "quick-'n-dirty" script in order to build
+# Kdenlive. If you want to criticise, feel free to do so.
+# If you want to re-write it, by all means!
+#
+# There are many reasons why you would want to
+# or build Kdenlive from source, so instead of debating
+# on whether it's a good idea or not, just build it.
+# This script is meant for Debian-style environments,
+# specifically Debian, Ubuntu, Linux Mint and similar.
+# If you want to roll your on for your favourite distribution,
+# please read the build documentation. In fact, read it anyway,
+# because it will help you understand which dependencies you
+# will need to install in order to build Kdenlive.
+#
+# Docs:
+#   https://github.com/KDE/kdenlive/blob/master/dev-docs/build.md
+#
+# This script is released under the MIT licence (see LICENSE file),
+# which means you can do with it what you want. If you break it,
+# you even get to keep the pieces, which is nice! :-D
+
+
+# Pause function - "press X to continue" 
+function pause(){
+   read -p "$*"
+}
+
 export $(grep DISTRIB_CODENAME /etc/lsb-release)
 MYPWD=$(pwd)
 
