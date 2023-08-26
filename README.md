@@ -9,10 +9,12 @@ read the individual build docs for each, and ensure you have the correct depende
 
 Files in this repository:
 
+```
 .
 ├── build-ardour.sh
 ├── build-kdenlive.sh
 ├── build-obs.sh
 ├── LICENSE
 └── README.md
+```
 
